@@ -47,16 +47,27 @@ export type PlotDataItem = {
 };
 
 /**
- * A "reference line" plot path is a numeric value. It creates a horizontal line on the plot at the
- * specified value.
- * @returns true if the series config is a reference line
+ * @description Evaluates whether a plot path value is not null, infinite, or NaN.
+ * 
+ * @param { Immutable<PlotPath> } path - Immutable object value of Plot Path and
+ * returns boolean value indicating whether it is not NaN number.
+ * 
+ * @returns { boolean } a boolean value indicating whether the provided plot path is
+ * a valid reference line path.
  */
 export function isReferenceLinePlotPathType(path: Immutable<PlotPath>): boolean {
   return !isNaN(Number.parseFloat(path.value));
 }
 
 /**
- * Coalesces null, undefined and empty string to undefined.
+ * @description Takes a value of type `T`, checks if it is undefined or an empty
+ * string, and returns the value or undefined.
+ * 
+ * @param { undefined | T } value - value to be checked for emptiness, which if empty
+ * returns `undefined`.
+ * 
+ * @returns { undefined | T } `undefined` when `value` is an empty string, and the
+ * original `value` otherwise.
  */
 function presence<T>(value: undefined | T): undefined | T {
   if (value === "") {
@@ -66,6 +77,21 @@ function presence<T>(value: undefined | T): undefined | T {
   return value ?? undefined;
 }
 
+/**
+ * @description Returns a string that displays the label or value of a `PlotPath`
+ * element, followed by an index number if necessary, using a provided threshold
+ * function to determine which to display.
+ * 
+ * @param { Readonly<PlotPath> } path - PlotPath object to be displayed.
+ * 
+ * @param { number } index - 1-based integer index of the plot element being displayed
+ * within the overall plot, and is used to construct the display name of the plot element.
+ * 
+ * @param { TFunction<"plot"> } t - function used to display the path index.
+ * 
+ * @returns { string } a string representation of the plot path's label or value,
+ * followed by the series number (index+1) if neither label nor value is present.
+ */
 export function plotPathDisplayName(
   path: Readonly<PlotPath>,
   index: number,
